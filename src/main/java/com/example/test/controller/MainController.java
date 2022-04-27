@@ -1,6 +1,7 @@
 package com.example.test.controller;
 
 import com.example.test.bean.Form;
+import com.example.test.bean.User;
 import com.example.test.bean.loginForm;
 import com.example.test.bean.mUser;
 import com.example.test.bo.PaymentBO;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -458,131 +460,65 @@ public class MainController {
         return map;
     }
 
-
-    //获取授权码
-    @GetMapping("login2")
-    public String genQrConnect(HttpSession session) {
-
-        // 微信开放平台授权baseUrl
-        String baseUrl = "https://open.weixin.qq.com/connect/qrconnect" +
-                "?appid=%s" +
-                "&redirect_uri=%s" +
-                "&response_type=code" +
-                "&scope=snsapi_login" +
-                "&state=%s" +
-                "#wechat_redirect";
-
-        // 回调地址
-        String redirectUrl = "http://101.43.159.242/system/callback"; //获取业务服务器重定向地址
-        try {
-            redirectUrl = URLEncoder.encode(redirectUrl, "UTF-8"); //url编码
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("Error");
-        }
-
-        // 防止csrf攻击（跨站请求伪造攻击）
-        //String state = UUID.randomUUID().toString().replaceAll("-", "");//一般情况下会使用一个随机数
-        String state = "imhelen";//为了让大家能够使用我搭建的外网的微信回调跳转服务器，这里填写你在ngrok的前置域名
-        System.out.println("state = " + state);
-
-        // 采用redis等进行缓存state 使用sessionId为key 30分钟后过期，可配置
-        //键："wechar-open-state-" + httpServletRequest.getSession().getId()
-        //值：satte
-        //过期时间：30分钟
-
-        //生成qrcodeUrl
-        String qrcodeUrl = String.format(
-                baseUrl,
-                "wx24a5ce02b6a6c154",
-                redirectUrl,
-                state);
-
-        return "redirect:" + qrcodeUrl;
-    }
+    @GetMapping("wechat")
+    public void Wechat(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    String url = "https://open.weixin.qq.com/connect/qrconnect?appid=" + WeixinUtil.KAPPID
+            + "&redirect_uri=" + URLEncoder.encode(WeixinUtil.CORE_REDIRECT_URL)
+            + "&response_type=code"
+            + "&scope=snsapi_login&state=STATE#wechat_redirect";//返回需要扫码的二维码html
+    resp.sendRedirect(url);
+   }
 
     //扫码后回调
-    /**
-     * @param code
-     * @param state
-     * @return
-     */
-    @GetMapping("callback")
-    public String callback(String code, String state){
+    @RequestMapping(value = "/callBack")
+    @ResponseBody
+    protected String callBack(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String code = req.getParameter("code");
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + WeixinUtil.KAPPID
+                        + "&secret=" + WeixinUtil.KAPPSECRET
+                        + "&code=" + code
+                        + "&grant_type=authorization_code";
+        net.sf.json.JSONObject jsonObject = AuthUtil.doGetJson(url);
+        String openid = jsonObject.getString("openid");
+        String token = jsonObject.getString("access_token");
+        String infoUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=" + token
+                        + "&openid=" + openid
+                        + "&lang=zh_CN";
+        JSONObject userInfo = AuthUtil.doGetJson(infoUrl);
+        //1.使用微信用户信息直接登录，无需注册和绑定
+        System.out.println(userInfo);
 
-        //得到授权临时票据code
-        System.out.println(code);
-        System.out.println(state);
+//当前开放平台与公众号绑定，可以获取到用户unionid，否则获取不到。
+        String unionid = userInfo.getString("unionid");
 
-        //从redis中将state获取出来，和当前传入的state作比较
-        //如果一致则放行，如果不一致则抛出异常：非法访问
-
-        //向认证服务器发送请求换取access_token
-        String baseAccessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token" +
-                "?appid=%s" +
-                "&secret=%s" +
-                "&code=%s" +
-                "&grant_type=authorization_code";
-
-        String accessTokenUrl = String.format(baseAccessTokenUrl,
-                "wx24a5ce02b6a6c154",
-                "e92724fe22f0ab7ca1cd6c7b4ca0bd6e",
-                code);
-
-        String result = null;
-        try {
-            result = HttpClientUtils.get(accessTokenUrl);
-            System.out.println("accessToken=============" + result);
-        } catch (Exception e) {
-//            throw new GuliException(20001, "获取access_token失败");
-            System.out.println("获取access_token失败");
-        }
-
-        //解析json字符串
-        Gson gson = new Gson();
-        HashMap map = gson.fromJson(result, HashMap.class);
-        String accessToken = (String)map.get("access_token");
-        String openid = (String)map.get("openid");
-
-        //查询数据库当前用用户是否曾经使用过微信登录
-//        Member member = memberService.getByOpenid(openid);
-        System.out.println("新用户注册");
-
-        //访问微信的资源服务器，获取用户信息
-        String baseUserInfoUrl = "https://api.weixin.qq.com/sns/userinfo" +
-                "?access_token=%s" +
-                "&openid=%s";
-        String userInfoUrl = String.format(baseUserInfoUrl, accessToken, openid);
-        String resultUserInfo = null;
-        try {
-            resultUserInfo = HttpClientUtils.get(userInfoUrl);
-            System.out.println("resultUserInfo==========" + resultUserInfo);
-        } catch (Exception e) {
-//                throw new GuliException(20001, "获取用户信息失败");
-            System.out.println("获取用户信息失败");
-        }
-
-        //解析json
-        HashMap<String, Object> mapUserInfo = gson.fromJson(resultUserInfo, HashMap.class);
-        String nickname = (String)mapUserInfo.get("nickname");
-        String headimgurl = (String)mapUserInfo.get("headimgurl");
-
-        //向数据库中插入一条记录
-//            member = new Member();
-//            member.setNickname(nickname);
-//            member.setOpenid(openid);
-//            member.setAvatar(headimgurl);
-//            memberService.save(member);
-
-
-//        if(member == null){
+        return unionid+userInfo;
+        //2.将微信与当前系统的账号进行绑定
+//        List<User> listLogin = userService.findByOpenid(unionid);//查询当前unionid是否被绑定过
+//        System.out.println("listLogin==" + listLogin);
+//        if (listLogin.size() > 0) {
+//                //已经存在直接登陆，跳转到首页,此处是shiro登陆代码，可更换为自己的默认登陆形式
+//                Subject user = SecurityUtils.getSubject();
+//                String name = listLogin.get(0).getName();
+//                VXToken usertoken = new VXToken(name, listLogin.get(0).getP_password(), name);
+//                usertoken.setRememberMe(false);
+//                try {
+//                        user.login(usertoken);
+//                } catch (Exception e) {
+//                        throw new RuntimeException("账号登陆异常！请联系管理员", e);
+//                }
+//                System.out.println("openid--------------------------------" + openid);
+//                System.out.println("unionid------------------------------" + unionid);
+//                req.getRequestDispatcher("/home").forward(req, resp);
+//                return null;
+//        } else {
+//                //不存在跳转到绑定页面
+//                System.out.println("openid--------------------------------" + openid);
+//                System.out.println("unionid------------------------------" + unionid);
 //
-//        }
-
-        //TODO 登录
-
-        return "redirect:http://101.43.159.242/system/login";
+////跳转到账号绑定页面，并将unionid传给页面
+//                return new ModelAndView("/portals/account/accountbind", "openid", unionid);
     }
-
+    
     @RequestMapping("/weChatToken")
     public void weChat(HttpServletRequest request, HttpServletResponse response) throws IOException {
         boolean isGet = request.getMethod().toLowerCase().equals("get");

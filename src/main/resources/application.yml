@@ -23,9 +23,3 @@ alipay:
   gateway: openapi.alipay.com
   returnUrl: http://101.43.159.242/system/success
   notifyUrl: hh
-
-wx:
-  open:
-    app_id=wx83b7bab1e156a9ea
-    app_secret=c21d9f00200651f0338ba015f5454633
-    redirect_url=http://101.43.159.242//system/callback

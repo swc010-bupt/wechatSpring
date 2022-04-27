@@ -1,7 +1,7 @@
 package com.example.test.utils;
 
 public class WeixinUtil {
-    public final static String KAPPID = "wx83b7bab1e156a9ea";
-    public final static String CORE_REDIRECT_URL = "http://139.196.242.203/system/callback";
-    public static final String KAPPSECRET = "c21d9f00200651f0338ba015f5454633";
+    public final static String KAPPID = "wx24a5ce02b6a6c154";
+    public final static String CORE_REDIRECT_URL = "http://predict.ximengedu.com.cn/system/callBack";
+    public static final String KAPPSECRET = "e92724fe22f0ab7ca1cd6c7b4ca0bd6e";
 }
