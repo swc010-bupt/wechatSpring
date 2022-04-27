@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>免费下载页面</title>
+    <script type="text/javascript">
+        function f() {
+            var item = document.getElementsByName("authCode")
+            if (item.value === ""){
+                alert("验证码不能为空！！！")
+            }
+        }
+    </script>
+</head>
+<body>
+感谢使用，填报推荐信息已生成，请点击链接下载！<br>
+
+<form action="/system/downloadPdfFree" method="post">
+    验证码（不区分大小写）：<input type="text" name="authCode">
+    <label><img type="image" src="/system/code" id="codeImage"  style="cursor:pointer;"/></label><input type="submit" onclick="f();" value="点此下载">
+</form>
+</body>
+</html>

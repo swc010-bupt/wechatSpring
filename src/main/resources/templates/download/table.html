@@ -1,0 +1,165 @@
+<html>
+<title>xxx</title>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div id="out" style="position: absolute;">
+    <hr />
+    <div>
+        <img src="http://101.43.159.242/image.png" style="position:absolute" /><br><br><br><br><br>
+        <img src="http://101.43.159.242/image.png" style="position:absolute">
+    </div>
+</div>
+</body>
+<script>
+    var yValue = 0;
+    window.onscroll = scrollBottomOrTop;
+    function scrollBottomOrTop() {
+        if (yValue > window.scrollY) {
+            var temp = yValue - window.scrollY
+            move(temp);
+        } else {
+            var temp = yValue - window.scrollY
+            move(temp);
+        }
+        yValue = window.scrollY;
+        console.log(yValue);
+    }
+
+    var img = document.getElementById("out");
+    img.top = 0;
+    function move(k) {
+        if (k > 0) {
+            img.top = img.top - Math.abs(k);
+        } else {
+            img.top = img.top + Math.abs(k);
+        }
+
+        return img.style.top = img.top + 'px';
+    }
+</script>
+<style>
+    #loading {
+        border:3px solid #C3DAF9;
+        background-color:#F7F9FC;
+        line-height:25px;
+        font-size:20pt;
+        display:none;
+    }
+
+    :invalid {
+        border-color: #e88;
+        -webkit-box-shadow: 0 0 5px rgba(255, 0, 0, .8);
+        box-shadow:0 0 5px rgba(255, 0, 0, .8);
+    }
+    :required {
+        border-color: #555555;
+        -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+        box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+    }
+    form {
+        width:305px; margin: 20px auto;
+    }
+    input {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        border:1px solid #111111;
+        font-size:20px;
+        width:300px;
+        min-height:30px;
+        display:block;
+        margin-bottom:15px;
+        margin-top:5px;
+        outline: none;
+        -webkit-border-radius:5px;
+        border-radius:5px;
+    }
+    input[type=submit] {
+        font-size:20px;
+        width:305px;
+        background:none;
+        padding:10px;
+    }
+    button{
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        border:1px solid #222222;
+        font-size:20px;
+        width:300px;
+        min-height:30px;
+        display:block;
+        margin-bottom:15px;
+        margin-top:5px;
+        -webkit-border-radius:5px;
+        border-radius:5px;
+    }
+    body{
+        background: url("http://101.43.159.242/bolandengbao.png") no-repeat center;
+        background-size:300% 300%;
+    }
+    form{
+        border: 1px solid red;
+        border-radius:5px;
+        -webkit-border-radius:5px;
+    }
+</style>
+
+<form id="fm" name="fm" method="post">
+    <label>
+        用户手机号码：
+        <input type="text" name="stuName" id = "stuName" required>
+    </label><br>
+    <label>
+        准考证号：
+        <input type="text" name="stuNum" required value="123456">
+    </label><br>
+    <label>
+        一志愿学校：
+        <input type="text" name="vSchool" required value="安徽大学">
+    </label><br>
+    <label>
+        一志愿学院：
+        <input type="text" name="vCollege" required value="通信工程">
+    </label><br>
+    <label>
+        学习方式（全日制或非全日制）：
+        <input type="text" name="learnType" required value="全日制">
+    </label><br>
+    <label>
+        专业名称和专业代码（请核实学校官网专业代码后填写，仅填写代码即可）：
+        <input type="text" name="pCode" required value="030102">
+    </label><br>
+    <label>
+        政治分数：
+        <input type="text" name="politicalScore" required value="88">
+    </label><br>
+    <label>
+        外语分数：
+        <input type="text" name="englishScore" required value="88">
+    </label><br>
+    <label>
+        专业课一分数（例如数学）：
+        <input type="text" name="pOneScore" required value="88">
+    </label><br>
+    <label>
+        专业课二分数：
+        <input type="text" name="pTwoScore" required value="88">
+    </label><br>
+    <label>
+        本科学校：
+        <input type="text" name="originSchool" required value="西安电子科技大学">
+    </label><br>
+    <label>
+        本科专业：
+        <input type="text" name="originProfession" required value="通信工程">
+    </label><br>
+    <label>
+        研究生类型（学硕或者专硕）：
+        <input type="text" name="preferCity" required value="学硕">
+    </label><br>
+    <div id="loading"><img src="http://101.43.159.242/wait.gif">正在处理分析数据,请稍候...</div>
+    <input type="button" value="点击提交" onClick="test();" id="btn1"/>
+</form>
+
+</html>

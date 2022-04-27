@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    name: test
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: password
+    driver-class-name: com.mysql.jdbc.Driver
+  mvc:
+    static-path-pattern: /static/**
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.ajax.pojo
+
+server:
+  port: 80
+  tomcat:
+    max-http-header-size: 8192
+
+alipay:
+  appId: 2021001168629025
+  privateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCDn23YJe7nkXCioMhEh5leAspYNAeeNoxjUGthIOFe1XySTiyYuOepawk0D5VAQ30/vYJGw6ysFGd7lGHF9kiV6lWAhBA1wvwKbmGnpqMWp1TRJgATTZCxRsLgK2soZAqQl8jz3RHqapbDvKPW82InGSxleOsgJ1XxXyXoKBZCJ1En+J7nW5UGIUAjDL4UfH/S0bokf9hB9Mqe0Kt6OkQf5nQ+CfSdIlm+8/UURbuMFoxleH1N/vrypUaHogqaFA84OAmyNmvZ2wTB/c+aCY8uaSsCvhkDxy10OHc/AN6MUCC0XSftKYF4EaYMqRWNmHBKlxuzOn7O63AtmpFusSqtAgMBAAECggEBAIHxmuNDB+pMNvQHYc/uQyaCALw1mbPDzLObyHcanAUhJRvX28Vm/ybOSkbAf6vzNSsBcCVmtwkoF8X0htaGv8BpmcIIH2zENEokEXsPU4Fg76aQKpDkCc5KusfPdbppkdiQUU8YWMCiPHe/u8zReXx6KM+BIjgbPYjPU8AwG1Fwx20xQQwQItfvUIV9Qdc8HtAflHQ4hj2zALlj4Z8WPtVU5zPp+42w+lcXvjJwYE8fNOEbb27fbh78HnDpL7M7hUfKIOgTMAKPKAdfR84R442fvTX9afimsHFkjdrszUf2IRR46uO0MkqXB1Obji0XijUOtAqhP3rOUKaxri2DpGECgYEA4TKZNatlmu3KxJEF4ZroMFhReEC3TUDW1Ce4U7iMkHNzKOBvEupA4bFAv8sEW8QdGYaLBVUuFGN2MxON64s1JF0FiknlyyK4WXAeE3WehbElcZgd9dCT0lgzf8k1I+g8wFs0vqoEBRGjPraPsNISstn7FbzI6g0PWbw60Sm7u1kCgYEAlaBDH7rk0DSin3ZKniXLEARDNCw951cRD/bfg2IBx/8pVpt0btKDHEAx0vtu978lIlwCIdSJtVtIjR7kpJX7ZDe76u/XldLc8U2chbycwgq1yZ/C02HKqYi8kxbvqqcqCjqo8B5jgbLtmEgb4Q5iS4d3q0lZtcmKWF1iN3B2g3UCgYAYeruUzfDZiofEHk+ZWpFqz+7rN321dBrmLPsofqMpAKPACcWJNNWgsvfq4VKz9vmC0NFD3yKHLNiobLO8qwE31rTHd4j3L+sCLeHXE64Lslnzoyl+kxG+h7/xYBnasWAJOODe6PRO6L/qDUZJXkySDIfysPbWGl1Uz9VE71hs4QKBgASe9nO8aeSkO4GBPby0nhjYiNrLov3KCpTbovuDw1pR3wz1sBrcFYCB2wgRC9RK6vKstMQmtDoNn6f8FEOg/iqSLhOLZLUT1g79vp/Cu3SisAqSDIpKst+ZgXlpc+1pTDsUpLMFvTz8MapKT9Ibh52diWyYz1R17PfdqnLb3k0hAoGAMBWbeuy0J5ORgCOLxF284B6gOXluF/SN++slUilZep5myLHX7gVaFl3haBueUHComHFunZ9JiYF9P2ehfAQ0mBKQpjxdY7rBNy1sWdrs/yPphbn9U5iTKQkxohf4tBZ+9AASXU1rrg9Q1kHQQpfgTgWkJu4N+L9b1+aMQhErIpo=
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAg59t2CXu55FwoqDIRIeZXgLKWDQHnjaMY1BrYSDhXtV8kk4smLjnqWsJNA+VQEN9P72CRsOsrBRne5RhxfZIlepVgIQQNcL8Cm5hp6ajFqdU0SYAE02QsUbC4CtrKGQKkJfI890R6mqWw7yj1vNiJxksZXjrICdV8V8l6CgWQidRJ/ie51uVBiFAIwy+FHx/0tG6JH/YQfTKntCrejpEH+Z0Pgn0nSJZvvP1FEW7jBaMZXh9Tf768qVGh6IKmhQPODgJsjZr2dsEwf3PmgmPLmkrAr4ZA8ctdDh3PwDejFAgtF0n7SmBeBGmDKkVjZhwSpcbszp+zutwLZqRbrEqrQIDAQAB
+  gateway: openapi.alipay.com
+  returnUrl: http://101.43.159.242/system/success
+  notifyUrl: hh
+
+wx:
+  open:
+    app_id=wx83b7bab1e156a9ea
+    app_secret=c21d9f00200651f0338ba015f5454633
+    redirect_url=http://101.43.159.242//system/callback

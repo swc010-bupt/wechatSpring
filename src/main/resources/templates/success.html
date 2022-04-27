@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购买成功</title>
+    <script type="text/javascript">
+        var t = 5;
+        function countDown(){
+            var time = document.getElementById("time");
+            t--;
+            time.value=t;
+            if (t<=0) {
+                window.location.href="payDownload";
+                clearInterval(inter);
+            }
+        }
+        var inter = setInterval("countDown()",1000);
+        //window.onload=countDown;
+    </script>
+</head>
+<body onload="countDown()">
+
+购买成功，PDF正在生成，还有<input type="text" readonly="true" value="5" id="time"/>秒跳转到下载页！请稍等！
+
+<!--也可以在这里写javascript代码，这样就不必在body标签中写onload="countDown()"。-->
+</body>
+</html>

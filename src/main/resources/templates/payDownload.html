@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>付费下载页面</title>
+</head>
+<body>
+感谢使用，填报推荐信息已生成，请填写验证码并点击链接下载！<br>
+<form action="/system/downloadPdfPay" method="post">
+    验证码（不区分大小写）：<input type="text" name="authCode">
+    <label><img type="image" src="/system/code" id="codeImage"  style="cursor:pointer;"/></label><input type="submit" value="点此下载">
+</form>
+</body>
+</html>

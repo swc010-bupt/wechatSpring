@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>合作机构提交</title>
+</head>
+<body>
+<h3>合作机构提交</h3>
+<label>请注意，需要在所下载模板内填写学生信息</label>
+<a href="/system/download_model">点击下载提交模板</a><br>
+<h4>提交学生信息</h4>
+<input id="articleImageFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
+<!--<a class="btn btn-warning" id = "import" onclick="importExcel()" shiro:hasPermission="system:student:import">-->
+<!--    <i class="fa fa-upload"></i> 导入</a>-->
+<button onclick="importExcel()">导入</button>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    function importExcel() {
+        var formData = new FormData();
+        var se = $("#articleImageFile");
+        var name = se.val();
+        formData.append("file", se[0].files[0]);
+        formData.append("name", name);//这个地方可以传递多个参数
+        $.ajax({
+            url: '/system/importExcel',
+            type: 'POST',
+            async: false,
+            data: formData,
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            beforeSend: function () {
+                console.log("正在进行，请稍候");
+            },
+            success: function (responseStr) {
+                if (responseStr === "上传成功") {
+                    alert("导入成功");
+                    window.location.href="/system/download_zip"
+                } else {
+                    alert("导入失败");
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>
