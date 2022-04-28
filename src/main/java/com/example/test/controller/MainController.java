@@ -470,7 +470,7 @@ public class MainController {
    }
 
     //扫码后回调
-    @RequestMapping(value = "/callBack")
+    @RequestMapping(value = "/callBack/callOn")
     @ResponseBody
     protected String callBack(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String code = req.getParameter("code");
